@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROSPORTS Textile Academy | Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Inter Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              900: '#0b192c',
+            },
+            pro: {
+              cyan: '#00d2ff',
+              orange: '#ff6b00',
+              emerald: '#10b981',
+              darkBg: '#090d16',
+              cardDark: '#0f172a',
+              cardLight: '#ffffff'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .dark ::-webkit-scrollbar-track { background: #090d16; }
+    .dark ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+    .dark ::-webkit-scrollbar-thumb:hover { background: #0284c7; }
+    
+    html:not(.dark) ::-webkit-scrollbar-track { background: #f1f5f9; }
+    html:not(.dark) ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    html:not(.dark) ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    .tab-content {
+      min-height: calc(100vh - 160px);
+    }
+    .glass-header {
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #certificate-print-area, #certificate-print-area * {
+        visibility: visible;
+      }
+      #certificate-print-area {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background: white !important;
+        color: black !important;
+        margin: 0;
+        padding: 2cm !important;
+        z-index: 999999;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-[#090d16] text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200 selection:bg-cyan-500 selection:text-white">
+
+  <!-- ==================== TOP NAVIGATION HEADER ==================== -->
+  <header class="sticky top-0 z-40 glass-header bg-white/90 dark:bg-[#090d16]/90 border-b border-slate-200 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        
+        <!-- NEW MODERN PROSPORTS LOGO -->
+        <div class="flex items-center space-x-2.5 cursor-pointer select-none group" onclick="switchTab('dashboard')">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-orange-500 p-0.5 shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+            <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+              <svg class="w-6 h-6 text-cyan-400" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 4h12a8 8 0 0 1 0 16H6V4z" stroke="url(#pGrad)" stroke-width="2.5"></path>
+                <path d="M6 14h12" stroke="#ff6b00" stroke-width="2"></path>
+                <path d="M6 28V20" stroke="#00d2ff" stroke-width="2.5"></path>
+                <circle cx="24" cy="24" r="3" fill="#00d2ff"></circle>
+                <defs>
+                  <linearGradient id="pGrad" x1="6" y1="4" x2="26" y2="20" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#00d2ff"/>
+                    <stop offset="1" stop-color="#2563eb"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center space-x-1.5 leading-none">
+              <span class="font-black text-lg tracking-tight text-slate-900 dark:text-white">PROSPORTS</span>
+              <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/30">ACADEMY</span>
+            </div>
+            <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium leading-none mt-1" data-i18n="tagline">Học Viện Khoa Học Dệt May & Chất Liệu</p>
+          </div>
+        </div>
+
+        <!-- COMPACT DESKTOP MENU -->
+        <nav class="hidden md:flex items-center space-x-1">
+          <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200 dark:border-cyan-800/50">
+            <span data-i18n="nav_dashboard">Tổng Quan</span>
+          </button>
+          <button onclick="switchTab('curriculum')" id="nav-curriculum" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60">
+            <span data-i18n="nav_curriculum">Bài Học (10)</span>
+          </button>
+          <button onclick="switchTab('tools')" id="nav-tools" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60">
+            <span data-i18n="nav_tools">Công Cụ</span>
+          </button>
+          <button onclick="switchTab('matrix')" id="nav-matrix" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60">
+            <span data-i18n="nav_matrix">Ma Trận Vải</span>
+          </button>
+          <button onclick="switchTab('quiz')" id="nav-quiz" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 flex items-center">
+            <i data-lucide="award" class="w-3.5 h-3.5 mr-1 text-orange-500"></i>
+            <span data-i18n="nav_quiz">Chứng Chỉ</span>
+          </button>
+          <button onclick="switchTab('glossary')" id="nav-glossary" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60">
+            <span data-i18n="nav_glossary">Thuật Ngữ</span>
+          </button>
+        </nav>
+
+        <!-- RIGHT CONTROLS: SEARCH, LANG, THEME, USER -->
+        <div class="flex items-center space-x-2 flex-shrink-0">
+          
+          <!-- STABLE FIXED-WIDTH DESKTOP SEARCH -->
+          <div class="relative hidden lg:block flex-shrink-0">
+            <input type="text" id="globalSearchInput" oninput="handleGlobalSearch(this.value)" placeholder="Tìm nhanh kiến thức..." class="bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-xs rounded-lg pl-8 pr-3 py-1.5 w-48 xl:w-56 transition-colors focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30 text-slate-800 dark:text-slate-200">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            <div id="searchResultsDropdown" class="hidden absolute right-0 top-full mt-2 w-80 max-w-[calc(100vw-32px)] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 rounded-xl shadow-2xl z-50 p-2 max-h-80 overflow-y-auto"></div>
+          </div>
+
+          <!-- BILINGUAL LANGUAGE SWITCHER -->
+          <button onclick="toggleLanguage()" class="flex-shrink-0 flex items-center space-x-1 px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition-all" title="Chuyển ngôn ngữ / Switch Language">
+            <span id="langFlagIcon">🇻🇳</span>
+            <span id="langLabel">VIE</span>
+          </button>
+
+          <!-- THEME TOGGLE (SYSTEM / LIGHT / DARK) -->
+          <button onclick="cycleTheme()" id="themeToggleBtn" class="flex-shrink-0 p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 transition-all" title="Chế độ hiển thị (Sáng/Tối/Hệ thống)">
+            <i data-lucide="monitor" id="themeIcon" class="w-4 h-4"></i>
+          </button>
+
+          <!-- USER PROFILE BADGE -->
+          <button onclick="openEmployeeModal()" class="flex-shrink-0 flex items-center space-x-1.5 bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all border border-slate-700">
+            <i data-lucide="user" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <span id="headerEmployeeName" class="truncate max-w-[90px]">Cán bộ NV</span>
+          </button>
+
+          <!-- MOBILE MENU BUTTON -->
+          <button onclick="toggleMobileMenu()" class="flex-shrink-0 md:hidden p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MOBILE MENU DROPDOWN -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-2 pb-4 space-y-1.5 shadow-lg">
+      <button onclick="switchTab('dashboard'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-slate-800 flex items-center"><i data-lucide="layout-dashboard" class="w-4 h-4 mr-2"></i><span data-i18n="nav_dashboard">Tổng Quan</span></button>
+      <button onclick="switchTab('curriculum'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center"><i data-lucide="book-open" class="w-4 h-4 mr-2"></i><span data-i18n="nav_curriculum">Bài Học 10 Chương</span></button>
+      <button onclick="switchTab('tools'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center"><i data-lucide="calculator" class="w-4 h-4 mr-2"></i><span data-i18n="nav_tools">Công Cụ Kỹ Thuật</span></button>
+      <button onclick="switchTab('matrix'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center"><i data-lucide="layers" class="w-4 h-4 mr-2"></i><span data-i18n="nav_matrix">Ma Trận Vải</span></button>
+      <button onclick="switchTab('quiz'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center"><i data-lucide="award" class="w-4 h-4 mr-2 text-orange-500"></i><span data-i18n="nav_quiz">Thi Chứng Chỉ</span></button>
+      <button onclick="switchTab('glossary'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center"><i data-lucide="spell-check" class="w-4 h-4 mr-2"></i><span data-i18n="nav_glossary">Từ Điển Thuật Ngữ</span></button>
+      
+      <!-- MOBILE SEARCH BAR & MOBILE DROPDOWN -->
+      <div class="pt-2 border-t border-slate-200 dark:border-slate-800 relative">
+        <div class="relative">
+          <input type="text" id="mobileSearchInput" oninput="handleGlobalSearch(this.value)" placeholder="Tìm kiếm tài liệu..." class="w-full bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs rounded-lg pl-8 pr-3 py-2 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-cyan-500">
+          <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+        </div>
+        <div id="mobileSearchResultsDropdown" class="hidden mt-1.5 w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl p-2 max-h-60 overflow-y-auto"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT CONTAINER ==================== -->
+  <main class="flex-grow max-w-7xl mx-auto w-full px-3 sm:px-6 lg:px-8 py-6">
+
+    <!-- ==================== 1. TAB: DASHBOARD (ENGAGING & VISUAL) ==================== -->
+    <div id="tab-dashboard" class="tab-content block space-y-6">
+      
+      <!-- HERO BANNER WITH DYNAMIC GRAPHICS -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white p-6 sm:p-8 lg:p-10 border border-cyan-500/20 shadow-2xl">
+        <div class="absolute -right-16 -bottom-16 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-16 -top-16 w-80 h-80 bg-orange-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <!-- LEFT HERO CONTENT -->
+          <div class="lg:col-span-7 xl:col-span-8 space-y-4">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-700/50 text-cyan-300 text-xs font-bold">
+              <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+              <span data-i18n="hero_badge">HỆ THỐNG ĐÀO TẠO CHẤT LIỆU PROSPORTS</span>
+            </div>
+            
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tight text-white leading-tight">
+              <span class="bg-gradient-to-r from-white via-cyan-100 to-cyan-400 bg-clip-text text-transparent" data-i18n="hero_title">
+                Khoa Học Chất Liệu & Kỹ Thuật Dệt May Thực Chiến
+              </span>
+            </h1>
+            
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl" data-i18n="hero_desc">
+              Trang bị toàn diện tri thức từ Xơ (1D) → Sợi (2D) → Kiểu Dệt & Hoàn tất → Lập kế hoạch dòng hàng may mặc (3D). Dành riêng cho Merchandisers (MD), Designers, R&D và QA/QC Prosports.
+            </p>
+            
+            <div class="pt-2 flex flex-wrap items-center gap-3">
+              <button onclick="switchTab('curriculum')" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg shadow-cyan-500/25 flex items-center whitespace-nowrap">
+                <i data-lucide="book-open" class="w-4 h-4 mr-2"></i><span data-i18n="btn_start_learning">Bắt Đầu Học Ngay</span>
+              </button>
+              <button onclick="switchTab('quiz')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow flex items-center whitespace-nowrap">
+                <i data-lucide="award" class="w-4 h-4 mr-2"></i><span data-i18n="btn_take_exam">Thi Lấy Chứng Chỉ</span>
+              </button>
+              <button onclick="switchTab('tools')" class="bg-slate-800/90 hover:bg-slate-700 text-cyan-300 font-semibold px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-cyan-900/60 transition-all flex items-center whitespace-nowrap">
+                <i data-lucide="calculator" class="w-4 h-4 mr-2"></i><span data-i18n="btn_tools">Công Cụ Quy Đổi</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- USER DASHBOARD STATUS (RIGHT COLUMN) -->
+          <div class="lg:col-span-5 xl:col-span-4 bg-slate-900/95 border border-slate-700/80 rounded-2xl p-5 space-y-4 backdrop-blur-md shadow-2xl">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-700 text-white font-black flex items-center justify-center text-sm shadow-md" id="userAvatarText">PS</div>
+                <div>
+                  <h4 class="text-sm font-bold text-white leading-snug" id="userDisplayName">Cán Bộ Prosports</h4>
+                  <p class="text-[11px] text-cyan-400 font-medium" id="userDepartment">Merchandiser (MD)</p>
+                </div>
+              </div>
+              <button onclick="openEmployeeModal()" class="text-slate-400 hover:text-cyan-400 p-1.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 transition-colors" title="Chỉnh sửa thông tin"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
+            </div>
+
+            <div class="space-y-1.5 pt-1">
+              <div class="flex justify-between text-xs font-semibold">
+                <span class="text-slate-400" data-i18n="progress_label">Tiến độ bài học:</span>
+                <span class="text-cyan-400 font-mono font-bold" id="dashProgressPercent">0%</span>
+              </div>
+              <div class="w-full bg-slate-950 rounded-full h-2.5 p-0.5 border border-slate-800">
+                <div id="dashProgressBar" class="bg-gradient-to-r from-cyan-500 to-orange-500 h-1.5 rounded-full w-0 transition-all duration-500"></div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5 text-center pt-1 text-xs">
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+                <span class="text-[10px] text-slate-400 block font-medium mb-0.5" data-i18n="completed_chapters">Đã hoàn thành</span>
+                <span class="font-black text-white text-base font-mono" id="dashChaptersRead">0/10</span>
+              </div>
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+                <span class="text-[10px] text-slate-400 block font-medium mb-0.5" data-i18n="best_score">Điểm thi cao nhất</span>
+                <span class="font-black text-orange-400 text-base font-mono" id="dashQuizScore">--</span>
+              </div>
+            </div>
+
+            <div id="dashCertificateBadge" class="hidden p-2.5 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-xs text-emerald-300 font-bold flex items-center justify-between shadow-sm">
+              <span class="flex items-center"><i data-lucide="award" class="w-4 h-4 mr-1.5 text-emerald-400"></i><span data-i18n="dash_cert_earned">Đã Nhận Chứng Chỉ</span></span>
+              <button onclick="viewCurrentCertificate()" class="text-cyan-400 hover:text-cyan-300 underline font-semibold" data-i18n="view_now">Xem Ngay</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- INTERACTIVE FIBER EXPLORER CARD (MOTION & ENGAGEMENT) -->
+      <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <span class="text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider" data-i18n="exp_badge">Trải Nghiệm Tương Tác</span>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white" data-i18n="exp_title">Khám Phá Vi Cấu Trúc & Đặc Tính Xơ Sợi Dệt May</h3>
+          </div>
+          <span class="text-xs text-slate-500" data-i18n="exp_sub">Nhấp chọn loại xơ để xem phân tích cơ lý tính</span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 mb-4" id="fiberExplorerButtons">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="bg-slate-50 dark:bg-slate-950 rounded-xl p-4 border border-slate-200 dark:border-slate-800" id="fiberExplorerDisplay">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- 4 GOLDEN PRINCIPLES -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+          <div class="w-8 h-8 rounded-lg bg-cyan-100 dark:bg-cyan-950 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-2 font-bold text-xs">1D-3D</div>
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white" data-i18n="rule_1_title">Quy Tắc 1D → 2D → 3D</h4>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" data-i18n="rule_1_desc">Xơ (1D) → Sợi (2D) → Vải (2D) → Áo (3D). Xơ dệt phải có chiều dài gấp tối thiểu 100 lần đường kính (ASTM).</p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+          <div class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-950 text-orange-600 dark:text-orange-400 flex items-center justify-center mb-2 font-bold text-xs">PASS</div>
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white" data-i18n="rule_2_title">Pass ≠ Không Có Lỗi</h4>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" data-i18n="rule_2_desc">Vải đạt Pass (≤ 20 điểm/100yd) vẫn có lỗi trong ngưỡng. MD bắt buộc phải tính Buffer Allowance dự phòng.</p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+          <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-2 font-bold text-xs">WR</div>
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white" data-i18n="rule_3_title">Trượt Nước vs Thoát Ẩm</h4>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" data-i18n="rule_3_desc">Water Repellent (WR) giúp giọt nước lăn tròn; Wicking kéo mồ hôi ra ngoài. Phân biệt rõ tính năng khi làm việc.</p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+          <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-2 font-bold text-xs">DNA</div>
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white" data-i18n="rule_4_title">Chất Liệu Phục Vụ Thiết Kế</h4>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" data-i18n="rule_4_desc">"Nguyên liệu phục vụ thiết kế, không điều khiển thiết kế". Hiểu chất liệu để tối ưu giá thành và độ bền sản phẩm.</p>
+        </div>
+      </div>
+
+      <!-- 10 CHAPTERS GRID -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-bold text-slate-900 dark:text-white" data-i18n="roadmap_title">Giáo Trình 10 Chuyên Đề Đào Tạo</h3>
+          <button onclick="switchTab('curriculum')" class="text-xs font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center">
+            <span data-i18n="view_all">Xem chi tiết</span> <i data-lucide="chevron-right" class="w-3.5 h-3.5 ml-0.5"></i>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5" id="dashboardModulesGrid">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- DATA CHARTS SECTION -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white" data-i18n="chart_title">Biểu Đồ So Sánh Tính Chất Vật Lý Xơ Dệt</h3>
+            <p class="text-[11px] text-slate-500" data-i18n="chart_desc">Trực quan hóa tỷ trọng, độ hồi ẩm và giới hạn nhiệt độ của các loại xơ sợi</p>
+          </div>
+          <div class="flex items-center space-x-1.5">
+            <button onclick="renderComparisonChart('density')" id="btnChartDensity" class="chart-tab-btn px-2.5 py-1 rounded-md text-xs font-bold bg-cyan-600 text-white" data-i18n="chart_density">Tỷ Trọng (g/cm³)</button>
+            <button onclick="renderComparisonChart('moisture')" id="btnChartMoisture" class="chart-tab-btn px-2.5 py-1 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800" data-i18n="chart_moisture">Độ Hồi Ẩm (%)</button>
+            <button onclick="renderComparisonChart('melting')" id="btnChartMelting" class="chart-tab-btn px-2.5 py-1 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800" data-i18n="chart_melting">Điểm Nóng Chảy (°C)</button>
+          </div>
+        </div>
+        <div class="h-64 w-full relative">
+          <canvas id="textileDataChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ==================== 2. TAB: CURRICULUM (BÀI HỌC) ==================== -->
+    <div id="tab-curriculum" class="tab-content hidden space-y-6">
+      
+      <!-- CHAPTER SELECTOR -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-bold text-cyan-600 dark:text-cyan-400 font-mono" id="currentChapterHeaderBadge">CHƯƠNG 01</span>
+              <span class="text-xs text-slate-400">•</span>
+              <span class="text-xs text-slate-500" id="currentChapterHeaderTime">12 phút đọc</span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white mt-0.5" id="currentChapterHeaderTitle">Chương 1: Khoa Học Xơ Dệt</h2>
+          </div>
+
+          <!-- RESPONSIVE CHAPTER DROPDOWN -->
+          <div class="flex items-center space-x-2">
+            <label class="text-xs font-semibold text-slate-500 whitespace-nowrap" data-i18n="select_chapter">Chọn bài:</label>
+            <select id="chapterSelectDropdown" onchange="loadChapter(parseInt(this.value))" class="bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs font-bold rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500">
+              <!-- Rendered via JS -->
+            </select>
+          </div>
+        </div>
+
+        <!-- QUICK BUTTONS GRID -->
+        <div class="mt-3.5 pt-3 border-t border-slate-200 dark:border-slate-800/80 grid grid-cols-5 sm:grid-cols-10 gap-1.5" id="chapterButtonsGrid">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- MAIN ARTICLE BODY & MINI QUIZ -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- SIDEBAR TOC (DESKTOP) -->
+        <div class="hidden lg:block lg:col-span-1 space-y-3">
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sticky top-24">
+            <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2.5 flex items-center">
+              <i data-lucide="list" class="w-3.5 h-3.5 mr-1.5 text-cyan-500"></i> <span data-i18n="toc_label">Mục Lục Bài Học</span>
+            </h4>
+            <div class="space-y-1 max-h-[calc(100vh-250px)] overflow-y-auto pr-1 text-xs" id="chapterTocList">
+              <!-- Rendered via JS -->
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800">
+              <a href="#miniQuizSection" class="w-full text-center py-2 px-3 rounded-xl bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 dark:text-orange-400 border border-orange-500/30 font-bold transition-all text-xs flex items-center justify-center">
+                <i data-lucide="check-square" class="w-3.5 h-3.5 mr-1.5"></i><span data-i18n="btn_quick_quiz">Làm Bài Ôn Tập (3 Câu)</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARTICLE VIEWER + MINI QUIZ -->
+        <div class="lg:col-span-3 space-y-6" id="chapterArticleViewer">
+          <!-- Dynamic Content -->
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================== 3. TAB: TECHNICAL TOOLS ==================== -->
+    <div id="tab-tools" class="tab-content hidden space-y-6">
+      
+      <!-- SUB-NAVIGATION FOR TOOLS -->
+      <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <button onclick="activateToolTab('converter')" id="tooltab-converter" class="tool-subtab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold bg-cyan-50 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-400 border border-cyan-300 dark:border-cyan-700/50 transition-all flex items-center">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5 mr-1.5"></i><span data-i18n="tool_yarn_converter">Quy Đổi Chỉ Số Sợi</span>
+        </button>
+        <button onclick="activateToolTab('fourpoint')" id="tooltab-fourpoint" class="tool-subtab-btn px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 border border-transparent transition-all flex items-center">
+          <i data-lucide="clipboard-check" class="w-3.5 h-3.5 mr-1.5"></i><span data-i18n="tool_4point_calculator">Tính Điểm Lỗi Vải 4 Điểm ASTM</span>
+        </button>
+        <button onclick="activateToolTab('labstandards')" id="tooltab-labstandards" class="tool-subtab-btn px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 border border-transparent transition-all flex items-center">
+          <i data-lucide="microscope" class="w-3.5 h-3.5 mr-1.5"></i><span data-i18n="tool_lab_standards">Tiêu Chuẩn Test Lab</span>
+        </button>
+      </div>
+
+      <!-- TOOL 1: YARN CONVERTER -->
+      <div id="tool-converter-panel" class="tool-panel block space-y-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm">
+          <div class="max-w-3xl space-y-1">
+            <span class="text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider" data-i18n="yarn_conv_sub">Direct vs Indirect Count Systems</span>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white" data-i18n="yarn_conv_title">Bộ Quy Đổi Chỉ Số Sợi & Phân Tích Thể Tích</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed" data-i18n="yarn_conv_desc">
+              Hệ gián tiếp (Ne, Nm): Số càng lớn sợi càng MẢNH. Hệ trực tiếp (Denier, Tex): Số càng lớn sợi càng DÀY.
+            </p>
+          </div>
+
+          <!-- INPUT FORM -->
+          <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="input_val_label">Giá trị chỉ số:</label>
+              <input type="number" id="converterInputVal" value="75" step="any" oninput="calculateYarnConversion()" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-900 dark:text-white font-mono focus:border-cyan-500 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="input_unit_label">Hệ đơn vị đầu vào:</label>
+              <select id="converterUnitSelect" onchange="calculateYarnConversion()" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-900 dark:text-white focus:border-cyan-500 focus:outline-none">
+                <!-- Populated dynamically via JS -->
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="input_fiber_label">Loại xơ (tính thể tích):</label>
+              <select id="converterFiberSelect" onchange="calculateYarnConversion()" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-900 dark:text-white focus:border-cyan-500 focus:outline-none">
+                <!-- Populated dynamically via JS -->
+              </select>
+            </div>
+          </div>
+
+          <!-- RESULT CARDS -->
+          <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5" id="conversionResultsGrid">
+            <!-- Populated via JS -->
+          </div>
+
+          <div class="mt-4 bg-cyan-50 dark:bg-blue-950/40 border border-cyan-200 dark:border-blue-900/60 rounded-xl p-3.5 text-xs text-slate-700 dark:text-slate-300">
+            <span class="font-bold text-cyan-800 dark:text-cyan-300 flex items-center mb-1"><i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-cyan-500"></i> <span data-i18n="md_notice_label">Lưu Ý MD:</span></span>
+            <p id="densityComparisonText" class="leading-relaxed"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 2: 4-POINT INSPECTION CALCULATOR -->
+      <div id="tool-fourpoint-panel" class="tool-panel hidden space-y-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+            <div>
+              <span class="text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider" data-i18n="fp_standard_title">Tiêu Chuẩn ASTM D5430</span>
+              <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-0.5" data-i18n="fp_calc_title">Kiểm Tra & Tính Điểm Lỗi Vải 4 Điểm</h3>
+            </div>
+            <div class="text-xs px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-mono">
+              <span data-i18n="fp_limit_badge">Chuẩn:</span> <strong>&le; 20 pts / 100 yd</strong>
+            </div>
+          </div>
+
+          <!-- INPUT & RESULT -->
+          <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="space-y-3 bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+              <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase" data-i18n="fp_step1_title">1. Thông Tin Cuộn Vải</h4>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1" data-i18n="fp_length_label">Chiều dài cuộn (Yards):</label>
+                <input type="number" id="fpLengthYards" value="100" min="1" oninput="calculateFourPoint()" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-900 dark:text-white font-mono">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1" data-i18n="fp_width_label">Khổ rộng vải (Inches):</label>
+                <input type="number" id="fpWidthInches" value="60" min="1" oninput="calculateFourPoint()" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-900 dark:text-white font-mono">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1" data-i18n="fp_max_pass_label">Ngưỡng điểm Pass tối đa:</label>
+                <input type="number" id="fpMaxThreshold" value="20" min="1" oninput="calculateFourPoint()" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-900 dark:text-white font-mono">
+              </div>
+            </div>
+
+            <div class="space-y-2.5 bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
+              <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase" data-i18n="fp_step2_title">2. Số Lượng Khuyết Tật</h4>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600 dark:text-slate-400" data-i18n="fp_d1">Lỗi 0 - 3" (1 pt):</span>
+                <input type="number" id="fpDefect1" value="4" min="0" oninput="calculateFourPoint()" class="w-16 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1 text-center font-mono">
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600 dark:text-slate-400" data-i18n="fp_d2">Lỗi 3 - 6" (2 pts):</span>
+                <input type="number" id="fpDefect2" value="2" min="0" oninput="calculateFourPoint()" class="w-16 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1 text-center font-mono">
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600 dark:text-slate-400" data-i18n="fp_d3">Lỗi 6 - 9" (3 pts):</span>
+                <input type="number" id="fpDefect3" value="1" min="0" oninput="calculateFourPoint()" class="w-16 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1 text-center font-mono">
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600 dark:text-slate-400" data-i18n="fp_d4">Lỗi > 9" / Lỗ (4 pts):</span>
+                <input type="number" id="fpDefect4" value="1" min="0" oninput="calculateFourPoint()" class="w-16 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1 text-center font-mono">
+              </div>
+            </div>
+
+            <!-- RESULT -->
+            <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between" id="fpResultContainer">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 3: LAB TESTING TABLE -->
+      <div id="tool-labstandards-panel" class="tool-panel hidden space-y-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+            <div>
+              <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider" data-i18n="lab_sub">Quality Assurance Protocols</span>
+              <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-0.5" data-i18n="lab_title">Bảng Tiêu Chuẩn Kiểm Nghiệm Vải (Lab Test)</h3>
+            </div>
+            <input type="text" id="labSearchInput" oninput="filterLabTable(this.value)" placeholder="Tìm bài test..." class="bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs rounded-lg px-3 py-1.5 w-56 text-slate-900 dark:text-white focus:outline-none">
+          </div>
+
+          <div class="mt-4 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+            <table class="w-full text-left text-xs" id="labStandardsTable">
+              <thead class="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-800">
+                <tr>
+                  <th class="p-3" data-i18n="th_test_name">Chỉ Tiêu Test</th>
+                  <th class="p-3" data-i18n="th_test_std">Tiêu Chuẩn (ASTM/AATCC)</th>
+                  <th class="p-3" data-i18n="th_test_method">Phương Pháp Đo</th>
+                  <th class="p-3" data-i18n="th_test_threshold">Ngưỡng Yêu Cầu</th>
+                  <th class="p-3" data-i18n="th_test_app">Ứng Dụng</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-slate-800/60 bg-white dark:bg-slate-900/50 text-slate-700 dark:text-slate-300" id="labStandardsTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ==================== 4. TAB: FABRIC SELECTOR MATRIX (COMPREHENSIVE 17 CATEGORIES) ==================== -->
+    <div id="tab-matrix" class="tab-content hidden space-y-6">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-7 shadow-sm">
+        <div class="max-w-3xl space-y-1">
+          <span class="text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider" data-i18n="matrix_sub">Smart Sourcing & Garment Planning</span>
+          <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-white" data-i18n="matrix_title">Ma Trận Chọn Chất Liệu Theo 17 Dòng Sản Phẩm May Mặc</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed" data-i18n="matrix_desc">
+            Trích xuất toàn diện từ Chương 9: Chi tiết công thức xơ sợi, cấu trúc dệt, hoàn tất và lưu ý kỹ thuật tránh khiếu nại (Claim) cho từng dòng sản phẩm.
+          </p>
+        </div>
+
+        <!-- CATEGORY SELECTOR PILLS -->
+        <div class="mt-5 flex flex-wrap gap-1.5" id="matrixCategoryButtons">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- DETAIL MATRIX DISPLAY -->
+        <div class="mt-5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-5 sm:p-6" id="matrixDetailCard">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== 5. TAB: QUIZ & CERTIFICATION ==================== -->
+    <div id="tab-quiz" class="tab-content hidden space-y-6">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm">
+        
+        <!-- LOCKED / GATED CARD -->
+        <div id="quizLockedCard" class="hidden text-center max-w-xl mx-auto py-8 space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto">
+            <i data-lucide="lock" class="w-7 h-7"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white" data-i18n="exam_locked_title">Bài Thi Chứng Chỉ Đang Bị Khóa</h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="exam_locked_desc">
+            Bạn cần học và hoàn thành tối thiểu 5/10 chuyên đề bài học (làm mini quiz cuối mỗi chương) để mở khóa bài thi chứng chỉ chuyên gia Prosports!
+          </p>
+          <div class="p-3 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
+            <div class="flex justify-between font-semibold mb-1">
+              <span class="text-slate-500" data-i18n="locked_prog_label">Tiến độ bài học hiện tại:</span>
+              <span class="text-cyan-600 dark:text-cyan-400 font-bold" id="lockedCurrentProgress">0/10 chương</span>
+            </div>
+            <div class="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2">
+              <div id="lockedProgressBar" class="bg-cyan-500 h-2 rounded-full w-0"></div>
+            </div>
+          </div>
+          <div class="pt-2 flex items-center justify-center gap-3">
+            <button onclick="switchTab('curriculum')" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs flex items-center">
+              <i data-lucide="book-open" class="w-4 h-4 mr-1.5"></i><span data-i18n="btn_goto_lessons">Vào Học Các Chương</span>
+            </button>
+            <button onclick="unlockExamOverride()" class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 underline" data-i18n="btn_override_unlock">
+              Bỏ qua khóa (Dành cho Kỹ thuật viên ôn lại)
+            </button>
+          </div>
+        </div>
+
+        <!-- QUIZ INTRO VIEW (UNLOCKED) -->
+        <div id="quizIntroCard" class="text-center max-w-xl mx-auto py-8 space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-orange-100 dark:bg-orange-950 text-orange-600 dark:text-orange-400 flex items-center justify-center mx-auto shadow-sm">
+            <i data-lucide="award" class="w-7 h-7"></i>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white" data-i18n="exam_title">Kiểm Tra Năng Lực & Nhận Chứng Chỉ PROSPORTS</h2>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="exam_desc">
+            Bài thi gồm 15 câu hỏi trắc nghiệm tổng hợp kiến thức từ 9 chương. Đạt từ 80% (12/15 câu đúng) trở lên sẽ được cấp Chứng Chỉ Điện Tử Prosports Textile Specialist chính thức.
+          </p>
+          <div class="pt-2">
+            <button onclick="startQuiz()" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:opacity-95 text-white font-bold px-8 py-3 rounded-xl text-xs sm:text-sm shadow-md transition-all" data-i18n="btn_start_exam_now">
+              Bắt Đầu Làm Bài Thi Ngay 🚀
+            </button>
+          </div>
+        </div>
+
+        <!-- ACTIVE QUIZ VIEW -->
+        <div id="quizActiveCard" class="hidden space-y-5 max-w-2xl mx-auto">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-800" id="quizCurrentQuestionTag">Câu 1/15</span>
+              <span class="text-[11px] text-slate-500" id="quizChapterRef">Chương 1</span>
+            </div>
+            <div class="text-xs font-mono font-bold text-orange-500" id="quizScoreTracker">Đúng: 0</div>
+          </div>
+
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug" id="quizQuestionText"></h3>
+
+          <div class="space-y-2" id="quizOptionsContainer"></div>
+
+          <div id="quizExplanationBox" class="hidden rounded-xl p-3.5 text-xs transition-all"></div>
+
+          <div class="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-800">
+            <button id="quizPrevBtn" onclick="prevQuizQuestion()" class="px-3.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold" disabled>
+              &larr; Câu trước
+            </button>
+            <button id="quizNextBtn" onclick="nextQuizQuestion()" class="px-4 py-1.5 rounded-lg bg-cyan-600 text-white hover:bg-cyan-500 text-xs font-bold transition-all">
+              Câu tiếp theo &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- QUIZ RESULT VIEW -->
+        <div id="quizResultCard" class="hidden space-y-6"></div>
+
+      </div>
+    </div>
+
+
+    <!-- ==================== 6. TAB: GLOSSARY (SEARCHABLE & FIXED) ==================== -->
+    <div id="tab-glossary" class="tab-content hidden space-y-6">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-7 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <div>
+            <span class="text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider" data-i18n="glossary_sub">Từ Điển A - Z</span>
+            <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white mt-0.5" data-i18n="glossary_title">Thuật Ngữ Dệt May Quốc Tế (Anh - Việt)</h2>
+            <p class="text-xs text-slate-500" data-i18n="glossary_desc">Tra cứu nhanh hơn 65 thuật ngữ dệt may quốc tế chuẩn ngành</p>
+          </div>
+          <input type="text" id="glossarySearchInput" oninput="filterGlossary(this.value)" placeholder="Lọc từ khóa (DWR, DTY, Loom, Crimp...)" class="bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs rounded-xl px-3 py-1.5 text-slate-900 dark:text-white w-56 focus:outline-none focus:border-cyan-500">
+        </div>
+
+        <div class="flex flex-wrap gap-1 py-2.5 border-b border-slate-200 dark:border-slate-800 text-[11px]" id="glossaryLetterFilters"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-3" id="glossaryListContainer"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==================== CERTIFICATE MODAL ==================== -->
+  <div id="certificateModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-3 overflow-y-auto">
+    <div class="relative max-w-3xl w-full my-6">
+      <button onclick="closeCertificateModal()" class="absolute -top-8 right-0 text-slate-400 hover:text-white text-xs font-bold flex items-center">
+        <i data-lucide="x" class="w-4 h-4 mr-1"></i><span data-i18n="btn_close">Đóng</span>
+      </button>
+
+      <!-- CERTIFICATE VIEW (CLEAN A4 PROPORTIONS) -->
+      <div id="certificate-print-area" class="bg-amber-50 text-slate-900 rounded-2xl p-6 sm:p-10 border-4 border-amber-600/40 shadow-2xl relative">
+        <div class="text-center space-y-4">
+          <div class="flex items-center justify-center space-x-2">
+            <div class="w-8 h-8 rounded-lg bg-slate-950 flex items-center justify-center text-cyan-400 font-bold text-xs">PS</div>
+            <span class="font-extrabold text-xl tracking-tight text-slate-900">PROSPORTS GROUP</span>
+          </div>
+
+          <div class="space-y-0.5">
+            <span class="text-[10px] font-extrabold uppercase tracking-widest text-amber-800" data-i18n="cert_header_sub">CHỨNG NHẬN ĐÀO TẠO NĂNG LỰC CHUYÊN MÔN</span>
+            <h1 class="text-2xl sm:text-3xl font-serif font-black text-slate-900" data-i18n="cert_header_title">CHỨNG CHỈ KHOA HỌC CHẤT LIỆU DỆT MAY</h1>
+            <p class="text-[10px] font-mono uppercase text-slate-500">PROSPORTS CERTIFIED TEXTILE SPECIALIST</p>
+          </div>
+
+          <p class="text-xs text-slate-600 italic" data-i18n="cert_presented_to">Chứng nhận cán bộ nhân viên:</p>
+
+          <div>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-blue-950 uppercase border-b border-amber-500/50 pb-1.5 inline-block px-6" id="certCandidateName">
+              NGUYỄN VĂN A
+            </h2>
+            <p class="text-xs text-slate-700 mt-1" id="certCandidateDept">Bộ phận: Merchandiser • Mã NV: PS-2026-88</p>
+          </div>
+
+          <p class="text-xs text-slate-700 max-w-xl mx-auto leading-relaxed" data-i18n="cert_body_text">
+            Đã hoàn thành xuất sắc chương trình đào tạo chuyên sâu về Khoa Học Xơ Sợi, Kéo Sợi, Dệt Thoi & Dệt Kim, Quản Lý Màu & Nhuộm, Hoàn Tất Chức Năng và Kiểm Nghiệm Lab.
+          </p>
+
+          <div class="grid grid-cols-3 gap-2 max-w-md mx-auto py-2 border-t border-b border-amber-600/20 text-xs">
+            <div>
+              <span class="text-[10px] text-slate-500 block" data-i18n="cert_result_lbl">KẾT QUẢ</span>
+              <span class="font-bold text-slate-900" id="certScoreText">100%</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 block" data-i18n="cert_grade_lbl">XẾP LOẠI</span>
+              <span class="font-bold text-amber-800" id="certGradeText">Xuất Sắc</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 block" data-i18n="cert_code_lbl">MÃ CHỨNG CHỈ</span>
+              <span class="font-mono font-bold text-slate-900" id="certCodeText">PS-TEX-2026</span>
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center justify-between max-w-lg mx-auto text-xs text-slate-700">
+            <div class="text-center">
+              <p class="text-[10px] text-slate-500"><span data-i18n="cert_issue_date_lbl">Ngày cấp:</span> <span id="certIssueDate">22/08/2026</span></p>
+              <div class="h-6 font-serif italic text-blue-950 font-bold text-sm">Prosports Board</div>
+              <p class="font-bold border-t border-slate-400 pt-0.5 text-[10px]" data-i18n="cert_board_sign">Hội Đồng Đào Tạo</p>
+            </div>
+
+            <div class="w-12 h-12 rounded-full bg-amber-200 border-2 border-amber-600 flex items-center justify-center text-amber-900 text-[8px] font-bold">
+              SEAL
+            </div>
+
+            <div class="text-center">
+              <p class="text-[10px] text-slate-500">Textile Science</p>
+              <div class="h-6 font-serif italic text-blue-950 font-bold text-sm">Ahn Dong-jin</div>
+              <p class="font-bold border-t border-slate-400 pt-0.5 text-[10px]" data-i18n="cert_inst_sign">Viện Nghiên Cứu</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mt-3 flex justify-end space-x-2">
+        <button onclick="window.print()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center shadow">
+          <i data-lucide="printer" class="w-3.5 h-3.5 mr-1.5"></i><span data-i18n="btn_print_pdf">In Hoặc Lưu PDF</span>
+        </button>
+        <button onclick="closeCertificateModal()" class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs" data-i18n="btn_close">
+          Đóng
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== EMPLOYEE PROFILE MODAL ==================== -->
+  <div id="employeeModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+        <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center">
+          <i data-lucide="user" class="w-4 h-4 mr-1.5 text-cyan-500"></i><span data-i18n="emp_modal_title">Hồ Sơ Nhân Viên Prosports</span>
+        </h3>
+        <button onclick="closeEmployeeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-700 dark:text-slate-300 font-semibold mb-1" data-i18n="emp_name_label">Họ và Tên Nhân Viên:</label>
+          <input type="text" id="empModalName" placeholder="Ví dụ: Nguyễn Văn A" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:border-cyan-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-slate-700 dark:text-slate-300 font-semibold mb-1" data-i18n="emp_id_label">Mã Nhân Viên (Staff ID):</label>
+          <input type="text" id="empModalId" placeholder="Ví dụ: PS-2026-88" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white font-mono focus:border-cyan-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-slate-700 dark:text-slate-300 font-semibold mb-1" data-i18n="emp_dept_label">Bộ Phận / Vị Trí:</label>
+          <select id="empModalDept" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:border-cyan-500 focus:outline-none">
+            <!-- Populated dynamically via JS -->
+          </select>
+        </div>
+      </div>
+
+      <div class="pt-2 flex justify-end space-x-2">
+        <button onclick="closeEmployeeModal()" class="px-3.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold" data-i18n="btn_cancel">Hủy</button>
+        <button onclick="saveEmployeeProfile()" class="px-4 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow" data-i18n="btn_save_profile">Lưu Hồ Sơ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-900 py-6 text-center text-xs text-slate-500 mt-auto transition-colors">
+    <div class="max-w-7xl mx-auto px-4 space-y-1">
+      <p class="font-bold text-slate-700 dark:text-slate-400">PROSPORTS GROUP • TEXTILE SCIENCE TRAINING & CERTIFICATION PORTAL</p>
+      <p class="text-[11px] text-slate-500" data-i18n="footer_credits">Giáo trình Khoa học Chất liệu dệt may - Tác giả Ahn Dong-jin</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
