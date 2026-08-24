@@ -1885,6 +1885,18 @@ function switchTab(tabId) {
     activeBtn.classList.add('text-cyan-600', 'dark:text-cyan-400', 'bg-cyan-50', 'dark:bg-cyan-950/60', 'border', 'border-cyan-200', 'dark:border-cyan-800/50');
   }
 
+  // Update mobile bottom nav buttons
+  document.querySelectorAll('.mob-nav-btn').forEach(btn => {
+    btn.classList.remove('text-cyan-600', 'dark:text-cyan-400', 'font-bold', 'bg-cyan-50/80', 'dark:bg-cyan-950/60');
+    btn.classList.add('text-slate-500', 'dark:text-slate-400', 'font-medium');
+  });
+
+  const activeMobBtn = document.getElementById(`mobnav-${tabId}`);
+  if (activeMobBtn) {
+    activeMobBtn.classList.remove('text-slate-500', 'dark:text-slate-400', 'font-medium');
+    activeMobBtn.classList.add('text-cyan-600', 'dark:text-cyan-400', 'font-bold', 'bg-cyan-50/80', 'dark:bg-cyan-950/60');
+  }
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
   initIcons();
 }
